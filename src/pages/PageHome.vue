@@ -19,12 +19,17 @@ export default {
     categories () {
       return Object.values(this.$store.state.categories)
     }
-  }
+  },
 
   // // Se llama antes de crear la instancia de Vue y setearle toda la configuracion inicial
-  // beforeCreate () {
-  //   console.log('📡 beforeCreate', this.categories)
-  // },
+  beforeCreate () {
+    // Aunque PageHome no usa directamente los foros, ubicarlos deberia ser su responsabilidad.
+    // Buena practica para componentes de pagina, ubicar todos los datos requeridos para estos o sus hijos, para que los hijos permanezcan sencillos!!
+    this.$store.dispatch('fetchAllCategories')
+      .then(categories => {
+        categories.forEach(category => this.$store.dispatch('fetchForums', { ids: Object.keys(category.forums) }))
+      })
+  }
 
   // // Realiza la creacion del componente, asi como toda su configuration/options/computed properties.
   // created () {
