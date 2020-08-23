@@ -52,7 +52,7 @@ export default {
 
   // // 1 Hooks mas(destroyed). Destroy: Una instancia es destruida, cuando es removida del DOM. Ejemplo v-if. Cuando no se cumple la condicion, se destruye el componente!
   // destroyed () {
-  //   console.log('📡 Destroyed - No tiene acceso a $el(removido del DOM).', this.$el)
+  //   console.log('📡 Destroyed - $el ya no es parte del DOM.', this.$el)
   // }
 
   // // Vue-router: redireccion a las pagina siguiente, produce la destruccion de componentes de la pag anterior (trigger -> beforeDestroy/destroyed).

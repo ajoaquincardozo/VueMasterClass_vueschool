@@ -110,24 +110,44 @@ export default new Vuex.Store({
       commit('setUser', { userId: user['.key'], user })
     },
 
-    fetchThread ({ dispatch }, { id }) {
-      return dispatch('fetchItem', { resource: 'threads', id, emoji: '📃' })
+    fetchCategory ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'categories', id, emoji: '🏷' })
     },
 
-    fetchUser ({ dispatch }, { id }) {
-      return dispatch('fetchItem', { resource: 'users', id, emoji: '🙋‍♀️' })
+    fetchForum ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'forums', id, emoji: '🌧' })
+    },
+
+    fetchThread ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'threads', id, emoji: '📃' })
     },
 
     fetchPost ({ dispatch }, { id }) {
       return dispatch('fetchItem', { resource: 'posts', id, emoji: '🗣' })
     },
 
-    fetchPosts ({ dispatch }, { ids }) {
-      return dispatch('fetchItems', { ids, emoji: '🗣', resource: 'posts' })
+    fetchUser ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'users', id, emoji: '🙋‍♀️' })
+    },
+
+    fetchCategories ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, emoji: '🏷', resource: 'categories' })
     },
 
     fetchForums ({ dispatch }, { ids }) {
       return dispatch('fetchItems', { ids, emoji: '🌧', resource: 'forums' })
+    },
+
+    fetchThreads ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, emoji: '📃', resource: 'threads' })
+    },
+
+    fetchPosts ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, emoji: '🗣', resource: 'posts' })
+    },
+
+    fetchUsers ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, emoji: '🙋‍♀️', resource: 'users' })
     },
 
     fetchAllCategories ({ state, commit }) {
@@ -155,8 +175,9 @@ export default new Vuex.Store({
       })
     },
 
+    // Promise.all: Recibe un array de promesas y retorna una sola promesa que resolve cuando todas hayan sido resueltas.
     fetchItems ({ dispatch }, { ids, emoji, resource }) {
-      // Promise.all: Recibe un array de promesas y retorna una sola promesa que resolve cuando todas hayan sido resueltas.
+      ids = Array.isArray(ids) ? ids : Object.keys(ids)
       return Promise.all(ids.map(id => dispatch('fetchItem', { id, emoji, resource })))
     }
   },
