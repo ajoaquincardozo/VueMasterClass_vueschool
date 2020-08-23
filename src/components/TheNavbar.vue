@@ -18,7 +18,8 @@
     <!-- use .navbar-open to open nav -->
     <nav class="navbar">
         <ul>
-          <li class="navbar-user">
+          <!-- Tratamiento de renderizado en manejo de data asincrona -> v-if -->
+          <li class="navbar-user" v-if="user">
             <router-link :to="{name: 'Profile'}">
               <img class="avatar-small" :src="user.avatar" alt="">
               <span>
