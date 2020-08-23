@@ -25,6 +25,7 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
     import PostList from '@/components/PostList'
     import PostEditor from '@/components/PostEditor'
     import { countObjectProperties } from '@/utils'
@@ -66,28 +67,29 @@
         }
       },
 
+      methods: {
+        ...mapActions([ 'fetchThread', 'fetchUser', 'fetchPosts' ])
+        // addPost ({ post }) {
+        // }
+      },
+
       created () {
         // Para leer una unica vez el thread, sin escuchar cambios usamos -> once. event -> value: will be fired immediately when the connection opens.
         // Se puede pensar como una llamada AJAX sin el costo de una llamada Http.
 
         // fetch thread
-        this.$store.dispatch('fetchThread', { id: this.id }).then(thread => {
+        this.fetchThread({ id: this.id }).then(thread => {
           // fetch user
-          this.$store.dispatch('fetchUser', { id: thread.userId })
+          this.fetchUser({ id: thread.userId })
 
-          this.$store.dispatch('fetchPosts', { ids: Object.keys(thread.posts) })
+          this.fetchPosts({ ids: Object.keys(thread.posts) })
             .then(posts => {
               posts.forEach(post => {
-                this.$store.dispatch('fetchUser', { id: post.userId })
+                this.fetchUser({ id: post.userId })
               })
             })
         })
       }
-
-      // methods: {
-      //   addPost ({ post }) {
-      //   }
-      // }
     }
 </script>
 

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import CategoryList from '@/components/CatergoryList'
 
 export default {
@@ -15,6 +16,12 @@ export default {
     CategoryList
   },
 
+  // Los metodos no son accesibles en el hook beforeCreate, ya que el componente todavia no fue creado :(
+  // Solucion: usar hook -> created
+  methods: {
+    ...mapActions(['fetchAllCategories', 'fetchForums'])
+  },
+
   computed: {
     categories () {
       return Object.values(this.$store.state.categories)
@@ -22,12 +29,12 @@ export default {
   },
 
   // // Se llama antes de crear la instancia de Vue y setearle toda la configuracion inicial
-  beforeCreate () {
+  created () {
     // Aunque PageHome no usa directamente los foros, ubicarlos deberia ser su responsabilidad.
     // Buena practica para componentes de pagina, ubicar todos los datos requeridos para estos o sus hijos, para que los hijos permanezcan sencillos!!
-    this.$store.dispatch('fetchAllCategories')
+    this.fetchAllCategories()
       .then(categories => {
-        categories.forEach(category => this.$store.dispatch('fetchForums', { ids: Object.keys(category.forums) }))
+        categories.forEach(category => this.fetchForums({ ids: Object.keys(category.forums) }))
       })
   }
 

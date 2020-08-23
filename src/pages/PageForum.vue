@@ -23,6 +23,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
   import ThreadList from '@/components/ThreadList'
 
   export default {
@@ -45,12 +46,16 @@
       }
     },
 
+    methods: {
+      ...mapActions(['fetchForum', 'fetchThreads', 'fetchUser'])
+    },
+
     created () {
-      this.$store.dispatch('fetchForum', { id: this.id })
+      this.fetchForum({ id: this.id })
         .then(forum => {
-          this.$store.dispatch('fetchThreads', { ids: forum.threads })
+          this.fetchThreads({ ids: forum.threads })
             .then(threads => {
-              threads.forEach(thread => this.$store.dispatch('fetchUser', { id: thread.userId }))
+              threads.forEach(thread => this.fetchUser({ id: thread.userId }))
             })
         })
     }
