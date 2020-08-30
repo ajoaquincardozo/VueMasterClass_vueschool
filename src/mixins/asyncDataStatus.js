@@ -14,6 +14,7 @@ export default {
     // Se hace en un metodo porque se podria querer realizar mas cosas.
     asyncDataStatus_fetched () {
       this.asyncDataStatus_ready = true
+      this.$emit('ready')
     }
   }
 }
