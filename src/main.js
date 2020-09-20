@@ -28,6 +28,12 @@ console.log(`Es Version(${VERSION}): ` + (VERSION === '1.0.1')) // Ejemplo de va
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
 
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    store.dispatch('fetchAuthUser')
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
