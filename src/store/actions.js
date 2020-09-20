@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/database'
+import 'firebase/auth'
 
 export default {
   createPost ({ commit, state }, post) {
@@ -22,8 +23,8 @@ export default {
       })
   },
 
-  createThread ({ commit, state, dispatch }, { text, title, forumId }) {
-    return new Promise(function (resolve, reject) {
+  createThread ({ commit, state }, { text, title, forumId }) {
+    return new Promise(function (resolve) {
       const threadId = firebase.database().ref('threads').push().key
       const postId = firebase.database().ref('posts').push().key
       const userId = state.authId
@@ -57,23 +58,30 @@ export default {
     })
   },
 
-  createUser ({ state, commit }, { name, username, email, avatar = null }) {
-    return new Promise(function (resolve, reject) {
+  createUser ({ state, commit }, { id, name, username, email, avatar = null }) {
+    return new Promise(function (resolve) {
       const registeredAt = Math.floor(Date.now() / 1000)
       const usernameLower = username.toLowerCase()
       email = email.toLowerCase()
       const user = { avatar, email, name, username, usernameLower, registeredAt }
-      const userId = firebase.database().ref('users').push().key
-      firebase.database().ref('users').child(userId).set(user)
+
+      firebase.database().ref('users').child(id).set(user)
         .then(() => {
-          commit('setItem', { resource: 'users', id: userId, item: user })
-          resolve(state.users[userId])
+          commit('setItem', { resource: 'users', id: id, item: user })
+          resolve(state.users[id])
         })
     })
   },
 
+  registerUserWithEmailAndPassword ({ dispatch }, { email, name, username, password, avatar = null }) {
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(data => {
+        dispatch('createUser', { id: data.user.uid, email, name, username, password, avatar })
+      })
+  },
+
   updateThread ({ commit, state }, { text, title, id }) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
       const thread = state.threads[id]
       const post = state.posts[thread.firstPostId]
       const edited = { at: Math.floor(Date.now() / 1000), by: state.authId }
@@ -93,7 +101,7 @@ export default {
   },
 
   updatePost ({ state, commit }, { id, text }) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const post = state.posts[id]
       const edited = { at: Math.floor(Date.now() / 1000), by: state.authId }
 
@@ -126,7 +134,7 @@ export default {
 
   fetchAllCategories ({ state, commit }) {
     console.log('🔥', '📂', 'all')
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       firebase.database().ref('categories').once('value', snapshot => {
         const categoriesObject = snapshot.val()
         Object.keys(categoriesObject).forEach(categoryId => {
@@ -141,7 +149,7 @@ export default {
 
   fetchItem ({ state, commit }, { id, emoji, resource }) {
     console.log('🔥', emoji, id)
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       firebase.database().ref(resource).child(id).once('value', snapshot => {
         commit('setItem', { resource, id: snapshot.key, item: snapshot.val() })
         resolve(state[resource][id])
