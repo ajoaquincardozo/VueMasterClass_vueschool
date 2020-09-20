@@ -80,6 +80,17 @@ export default {
       })
   },
 
+  signInUserWithEmailAndPassword (context, { email, password }) {
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+  },
+
+  signOut ({ commit }) {
+    return firebase.auth().signOut()
+      .then(() => {
+        commit('setAuthId', null)
+      })
+  },
+
   updateThread ({ commit, state }, { text, title, id }) {
     return new Promise(function (resolve) {
       const thread = state.threads[id]

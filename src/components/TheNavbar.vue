@@ -1,7 +1,7 @@
 <template>
   <header class="header" id="header">
-    
-    <router-link 
+
+    <router-link
       :to="{name: 'Home'}"
       class="logo"
     >
@@ -17,9 +17,9 @@
 
     <!-- use .navbar-open to open nav -->
     <nav class="navbar">
-        <ul>
+        <ul v-if="user">
           <!-- Tratamiento de renderizado en manejo de data asincrona -> v-if -->
-          <li class="navbar-user" v-if="user">
+          <li class="navbar-user">
             <router-link :to="{name: 'Profile'}">
               <img class="avatar-small" :src="user.avatar" alt="">
               <span>
@@ -38,30 +38,20 @@
               </ul>
             </div>
           </li>
+          <li class="navbar-item">
+            <a @click.prevent="$store.dispatch('signOut')">SignOut</a>
+          </li>
         </ul>
-
-        <!-- <ul>
-            <li class="navbar-item">
-                <a href="index.html">Home</a>
-            </li>
-            <li class="navbar-item">
-                <a href="category.html">Category</a>
-            </li>
-            <li class="navbar-item">
-                <a href="forum.html">Forum</a>
-            </li>
-            <li class="navbar-item">
-                <a href="thread.html">Thread</a>
-            </li>
-            <li class="navbar-item mobile-only">
-                <a href="profile.html">My Profile</a>
-            </li>
-            <li class="navbar-item mobile-only">
-                <a href="#">Logout</a>
-            </li>
-        </ul> -->
+        <ul v-else>
+          <li class="navbar-item">
+            <router-link :to="{name: 'SignIn'}">Sign In</router-link>
+          </li>
+          <li class="navbar-item">
+            <router-link :to="{name: 'Register'}">Register</router-link>
+          </li>
+        </ul>
     </nav>
-  </header>  
+  </header>
 </template>
 
 <script>

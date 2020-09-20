@@ -31,6 +31,8 @@ firebase.initializeApp(firebaseConfig)
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     store.dispatch('fetchAuthUser')
+  } else {
+    /* Opcion 2 (signOut): Se podria realizar el dispatch signOut cuando el usuario es null */
   }
 })
 
@@ -40,8 +42,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App },
-  beforeCreate () {
-    store.dispatch('fetchUser', { id: store.state.authId })
-  }
+  components: { App }
 })
