@@ -3,6 +3,7 @@
       <h1>Create new thread in <i>{{ forum.name }}</i></h1>
 
       <ThreadEditor
+        ref="editor"
         @save = "save"
         @cancel = "cancel"
       />
@@ -28,9 +29,19 @@
       }
     },
 
+    data () {
+      return {
+        saved: false
+      }
+    },
+
     computed: {
       forum () {
         return this.$store.state.forums[this.forumId]
+      },
+
+      hasUnsavedChanges () {
+        return (this.$refs.editor.form.title || this.$refs.editor.form.text) && !this.saved
       }
     },
 
@@ -43,6 +54,7 @@
           text,
           title
         }).then(thread => {
+          this.saved = true
           this.$router.push({ name: 'ThreadShow', params: { id: thread['.key'] } })
         })
       },
@@ -55,6 +67,19 @@
     created () {
       this.fetchForum({ id: this.forumId })
         .then(() => { this.asyncDataStatus_fetched() })
+    },
+
+    beforeRouteLeave (to, from, next) {
+      if (this.hasUnsavedChanges) {
+        const confirmed = window.confirm('Estas seguro de que quieres irte ? Los cambios no guardados se perderán.')
+        if (confirmed) {
+          next()
+        } else {
+          next(false)
+        }
+      } else {
+        next()
+      }
     }
   }
 </script>

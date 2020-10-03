@@ -16,7 +16,7 @@
         </p>
 
         <PostList :posts="posts"/>
-        
+
         <!--Example list form child component ->  @<PostEditor save="addPost" :threadId="id"/>-->
         <PostEditor
           :threadId="id"
