@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from '@/store'
 import Router from 'vue-router'
 import Home from '@/pages/PageHome'
 import ThreadShow from '@/pages/PageThreadShow'
@@ -55,7 +56,15 @@ export default new Router({
       path: '/me',
       name: 'Profile',
       component: Profile,
-      props: true
+      props: true,
+      // Definimos el mismo navigation guard pero a nivel de rutas
+      beforeEnter (to, from, next) {
+        if (store.state.authId) {
+          next()
+        } else {
+          next({ name: 'Home' })
+        }
+      }
     },
     {
       path: '/me/edit',
@@ -72,6 +81,17 @@ export default new Router({
       path: '/signin',
       name: 'SignIn',
       component: SignIn
+    },
+    {
+      path: '/logout',
+      name: 'SignOut',
+
+      // Normalmente para hacer el logOut, se podria hacer un componente vacio y usar Hooks. Pero se puede usar el aproach de Nav. Guards de la siguiente manera:
+      // Lo llamo Componentless(routes with navigation-guard). De esta manera, no necesitamos especificar el componente aqui :).
+      beforeEnter (to, from, next) {
+        store.dispatch('signOut')
+          .then(() => next({ name: 'Home' }))
+      }
     },
     {
       path: '*',

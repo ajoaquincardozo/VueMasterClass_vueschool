@@ -16,7 +16,7 @@ export default new Vuex.Store({
     threads: {},
     posts: {},
     users: {},
-    authId: 'something' // null
+    authId: null
   },
 
   // son iguales a las computed properties

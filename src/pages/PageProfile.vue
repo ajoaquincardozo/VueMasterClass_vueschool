@@ -31,7 +31,6 @@
   import UserProfileCard from '@/components/UserProfileCard'
   import UserProfileCardEditor from '@/components/UserProfileCardEditor'
   import { mapGetters } from 'vuex'
-  import store from '@/store'
 
   export default {
     components: {
@@ -62,13 +61,14 @@
     },
 
     // Navigation guards
-    beforeRouteEnter (to, from, next) {
-      if (store.state.authId) {
-        next()
-      } else {
-        next({ name: 'Home' })
-      }
-    },
+    // Se movio a router/index. Ya que la logica tiene mas sentido que este definido donde se implementan (subjetivo).
+    // beforeRouteEnter (to, from, next) {
+    //   if (store.state.authId) {
+    //     next()
+    //   } else {
+    //     next({ name: 'Home' })
+    //   }
+    // },
 
     // Navega de una ruta a otra, donde ambas renderizan el mismo componente. Ejemplo navegando de un hilo a otro.
     // beforeRouteUpdate (to, from, next) {
