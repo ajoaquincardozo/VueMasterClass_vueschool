@@ -15,7 +15,7 @@ import SignIn from '@/pages/PageSignIn'
 Vue.use(Router)
 
 // El sistema de routeo ba de arriba hacia abajo. Tener cuidado cuando se realiza un ABM. create/edit tienen que ir antes de /elem/:id
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -57,14 +57,15 @@ export default new Router({
       name: 'Profile',
       component: Profile,
       props: true,
-      // Definimos el mismo navigation guard pero a nivel de rutas
-      beforeEnter (to, from, next) {
-        if (store.state.authId) {
-          next()
-        } else {
-          next({ name: 'Home' })
-        }
-      }
+      // Definimos el mismo navigation guard pero a nivel de rutas | Se movio para realizar de forma global por medio de -> beforeEach
+      // beforeEnter (to, from, next) {
+      //   store.state.authId ? next() : next({ name: 'Home' })
+      // }
+
+      // Metafields: Sirve para identificar rutas y tomar accion.
+      meta: { requiresAuth: true }
+      // Rutas anidadas (No estan cubiertas por el metafield de componente padre). Para que esten protegidas es necesario, realizar logica en el Global Nav Guard.
+      // children: [{ path: 'nested', component: Profile }]
     },
     {
       path: '/me/edit',
@@ -102,3 +103,18 @@ export default new Router({
   ],
   mode: 'history'
 })
+
+// Forma de realizar agregado de logica segun el sitio donde intentemos navegar! - Useful
+router.beforeEach((to, from, next) => {
+  console.log(`🚦 navigating to ${to.name} from ${from.name}`)
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+    if (store.state.authId) {
+      next()
+    } else {
+      next({ name: 'Home' })
+    }
+  }
+  next()
+})
+
+export default router
