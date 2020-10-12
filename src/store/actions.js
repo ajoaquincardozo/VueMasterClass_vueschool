@@ -23,6 +23,28 @@ export default {
       })
   },
 
+  initAuthentication ({ dispatch, commit, state }) {
+    return new Promise((resolve, reject) => {
+      // unsubscribe observer if already listening | Traduc: Des-subscribe el observador si ya existe.
+      if (state.unsubscribeAuthObserver) {
+        state.unsubscribeAuthObserver()
+      }
+
+      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+        console.log('🐾 the user has changed')
+        if (user) {
+          dispatch('fetchAuthUser')
+            .then(dbUser => resolve(dbUser))
+        } else {
+          /* Opcion 2 (signOut): Se podria realizar el dispatch signOut cuando el usuario es null */
+          resolve(null)
+        }
+      })
+
+      commit('setUnsubscribeAuthObserver', unsubscribe)
+    })
+  },
+
   createThread ({ commit, state }, { text, title, forumId }) {
     return new Promise(function (resolve) {
       const threadId = firebase.database().ref('threads').push().key

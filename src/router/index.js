@@ -104,16 +104,21 @@ const router = new Router({
   mode: 'history'
 })
 
-// Forma de realizar agregado de logica segun el sitio donde intentemos navegar! - Useful
+// Global Navigation guard[GNG] (trad: Protector de navegacion global)
 router.beforeEach((to, from, next) => {
   console.log(`🚦 navigating to ${to.name} from ${from.name}`)
-  if (to.matched.some(route => route.meta.requiresAuth)) {
-    if (store.state.authId) {
-      next()
-    } else {
-      next({ name: 'Home' })
-    }
-  }
+  // Refactor: Movimos observer change User Auth(firebase) de main.js a actions.js y lo utilizamos en GNG.
+  // Se realiza de este forma para obtener el user(proceso asyncrono) antes de la redireccion a otra ruta.
+  store.dispatch('initAuthentication')
+    .then(user => {
+      if (to.matched.some(route => route.meta.requiresAuth)) { // protected route
+        if (user) {
+          next()
+        } else {
+          next({ name: 'Home' })
+        }
+      }
+    })
   next()
 })
 
