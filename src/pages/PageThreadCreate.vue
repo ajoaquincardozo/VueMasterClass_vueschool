@@ -41,7 +41,7 @@
       },
 
       hasUnsavedChanges () {
-        return (this.$refs.editor.form.title || this.$refs.editor.form.text) && !this.saved
+        return this.$refs.editor && (this.$refs.editor.form.title || this.$refs.editor.form.text) && !this.saved
       }
     },
 

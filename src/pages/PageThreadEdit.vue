@@ -42,7 +42,7 @@
       },
 
       hasUnsavedChanges () {
-        return this.$refs.editor.form.title !== this.thread.title || this.$refs.editor.form.text !== this.text
+        return this.$refs.editor && (this.$refs.editor.form.title !== this.thread.title || this.$refs.editor.form.text !== this.text)
       }
     },
 
