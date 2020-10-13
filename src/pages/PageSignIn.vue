@@ -47,14 +47,20 @@ export default {
         email: this.form.email,
         password: this.form.password
       })
-      .then(() => this.$router.push('/'))
+      .then(() => this.successRedirect())
       .catch(error => alert('🤷‍♀️' + error.message))
     },
 
     signInWithGoogle () {
       this.$store.dispatch('signInWithGoogle')
-        .then(() => this.$router.push('/'))
+        .then(() => this.successRedirect())
         .catch(error => alert('🤷‍♀️' + error.message))
+    },
+
+    // $route !== $router. 1ro es la Ruta activa | 2do es la instancia global del router.
+    successRedirect () {
+      const redirectTo = this.$route.query.redirectTo || { name: 'Home' }
+      this.$router.push(redirectTo)
     }
   },
 
