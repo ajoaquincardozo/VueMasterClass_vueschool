@@ -19,13 +19,18 @@
 
         <!--Example list form child component ->  @<PostEditor save="addPost" :threadId="id"/>-->
         <PostEditor
+          v-if="authUser"
           :threadId="id"
         />
+        <div v-else class="text-center" style="margin-bottom: 50px;">
+          <router-link :to="{ name: 'SignIn', query: { redirectTo: $route.path } }">Sign in</router-link> or
+          <router-link :to="{ name: 'Register', query: { redirectTo: $route.path } }">Register</router-link> to post a reply.
+        </div>
     </div>
 </template>
 
 <script>
-    import { mapActions } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
     import PostList from '@/components/PostList'
     import PostEditor from '@/components/PostEditor'
     import { countObjectProperties } from '@/utils'
@@ -47,6 +52,11 @@
       },
 
       computed: {
+
+        ...mapGetters({
+          authUser: 'authUser'
+        }),
+
         thread () {
           return this.$store.state.threads[this.id]
         },
