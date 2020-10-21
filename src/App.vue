@@ -7,10 +7,12 @@
           y por medio de una prop, podremos cambiar el estado cuando se recibamos el evento @ready (Importante).
 
         -Diferencias entre v-if (solo renderiza si es true, caso contrario remueve del DOM) y v-show (siempre renderiza el elemento y lo mantiene en el DOM)
-          --v-if: Tiene mayores costos de alternado y v-show: Tiene mayores costos de renderizado inicial. 
+          --v-if: Tiene mayores costos de alternado y v-show: Tiene mayores costos de renderizado inicial.
             Preferir v-show para alternar muy seguido y v-if cuando no sea propensa a cambiar durante la ejecucion(runtime).
         -->
-      <router-view v-show="showPage" @ready="pageReady" />
+
+      <!-- P/ navegar dentro del mismo componente (PageThreadShow), es necesario especificar :key, para que no re-utilice el mismo componente(por defecto)  -->
+      <router-view :key="$route.path" v-show="showPage" @ready="pageReady" />
       <AppSpinner v-show="!showPage"/>
     </div>
   </div>

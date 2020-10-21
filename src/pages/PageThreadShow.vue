@@ -10,6 +10,9 @@
             Edit thread
           </router-link>
         </h1>
+
+        <router-link :to="{name: 'ThreadShow', params: {id: '-KvcwywxaxxIfsHR88wa'}}">Random thread</router-link>
+
         <p>
             By <a href="#" class="link-unstyled">{{ user.name }}</a>, <AppDate :timestamp="thread.publishedAt"/>.
             <span style="float:right; margin-top: 2px;" class="hide-mobile text-faded text-small">{{ repliesCount }} replies by {{ contributorsCount }} contributors</span>
