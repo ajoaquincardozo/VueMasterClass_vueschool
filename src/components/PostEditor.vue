@@ -3,10 +3,10 @@
     <!-- equivalent v-model === :value="text" @input= "text = $event.target.value" -->
     <form @submit.prevent="save">
       <div class="form-group">
-        <textarea 
-          name="" 
-          id="" 
-          cols="100" 
+        <textarea
+          name=""
+          id=""
+          cols="100"
           rows="10"
           class="form-input"
           v-model = "text"
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
   // console.log('https://vueschool.io/lessons/communicate-between-components')
 
   export default {
@@ -72,6 +73,8 @@
     },
 
     methods: {
+      ...mapActions('posts', ['createPost', 'updatePost']),
+
       save () {
         this.persist()
           .then(post => {
@@ -95,7 +98,7 @@
         this.$emit('save', { post })
 
         // ya estamos en una instancia de Vue [this.$set], es equivalente a Vue.set(obj, propertyName, value)
-        return this.$store.dispatch('createPost', post)
+        return this.createPost(post)
       },
 
       update () {
@@ -104,7 +107,7 @@
           text: this.text
         }
 
-        return this.$store.dispatch('updatePost', payLoad)
+        return this.updatePost(payLoad)
       },
 
       persist () {

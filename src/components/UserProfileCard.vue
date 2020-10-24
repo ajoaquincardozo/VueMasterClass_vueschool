@@ -31,7 +31,7 @@
 
     <div class="text-center">
       <hr>
-      <router-link 
+      <router-link
         :to="{name: 'ProfileEdit'}"
         class="btn-green btn-small"
       >
@@ -53,11 +53,11 @@ export default {
 
   computed: {
     userThreadsCount () {
-      return this.$store.getters.userThreadsCount(this.user['.key'])
+      return this.$store.getters['users/userThreadsCount'](this.user['.key'])
     },
 
     userPostsCount () {
-      return this.$store.getters.userPostsCount(this.user['.key'])
+      return this.$store.getters['users/userPostsCount'](this.user['.key'])
     }
   }
 }

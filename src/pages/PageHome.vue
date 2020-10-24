@@ -11,23 +11,22 @@ import CategoryList from '@/components/CatergoryList'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
-  name: 'HelloWorld',
-
-  mixins: [ asyncDataStatus ],
-
   components: {
     CategoryList
   },
 
+  mixins: [ asyncDataStatus ],
+
   // Los metodos no son accesibles en el hook beforeCreate, ya que el componente todavia no fue creado :(
   // Solucion: usar hook -> created
   methods: {
-    ...mapActions(['fetchAllCategories', 'fetchForums'])
+    ...mapActions('categories', ['fetchAllCategories']),
+    ...mapActions('forums', ['fetchForums'])
   },
 
   computed: {
     categories () {
-      return Object.values(this.$store.state.categories)
+      return Object.values(this.$store.state.categories.items)
     }
   },
 

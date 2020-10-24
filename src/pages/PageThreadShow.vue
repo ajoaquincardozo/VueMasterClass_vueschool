@@ -57,19 +57,19 @@
       computed: {
 
         ...mapGetters({
-          authUser: 'authUser'
+          authUser: 'auth/authUser'
         }),
 
         thread () {
-          return this.$store.state.threads[this.id]
+          return this.$store.state.threads.items[this.id]
         },
 
         repliesCount () {
-          return this.$store.getters.threadRepliesCount(this.id)
+          return this.$store.getters['threads/threadRepliesCount'](this.id)
         },
 
         user () {
-          return this.$store.state.users[this.thread.userId]
+          return this.$store.state.users.items[this.thread.userId]
         },
 
         // Cantidad de colaboradores en thread
@@ -79,13 +79,15 @@
 
         posts () {
           const postsIds = Object.values(this.thread.posts)
-          return Object.values(this.$store.state.posts)
+          return Object.values(this.$store.state.posts.items)
                        .filter(post => postsIds.includes(post['.key']))
         }
       },
 
       methods: {
-        ...mapActions([ 'fetchThread', 'fetchUser', 'fetchPosts' ])
+        ...mapActions('threads', ['fetchThread']),
+        ...mapActions('users', ['fetchUser']),
+        ...mapActions('posts', ['fetchPosts'])
         // addPost ({ post }) {
         // }
       },
