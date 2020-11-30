@@ -6,7 +6,10 @@ import router from './router'
 import firebase from 'firebase/app'
 import store from './store'
 import AppDate from '@/components/AppDate'
+import vuelidate from 'vuelidate'
 
+// Lo podemos habilitar de forma global o en el componente a usar: https://vuelidate.js.org/#sub-basic-usage
+Vue.use(vuelidate)
 Vue.component('AppDate', AppDate)
 Vue.config.productionTip = false
 
