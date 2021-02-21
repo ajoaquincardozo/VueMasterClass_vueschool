@@ -19,7 +19,7 @@
     <nav class="navbar">
         <ul v-if="user">
           <!-- Tratamiento de renderizado en manejo de data asincrona -> v-if -->
-          <li class="navbar-user">
+          <li class="navbar-user" v-click-outside="closeUserDropdown">
             <a @click.prevent="userDropDownOpen = !userDropDownOpen">
               <img class="avatar-small" :src="user.avatar" alt="">
               <span>
@@ -58,7 +58,13 @@
 <script>
 // Cuando son componentes de instancia unica -> se recomienda TheNameComponent. Ver Style guide Vue.
 import { mapGetters } from 'vuex'
+import clickOutside from '@/directives/click-outside'
+
 export default {
+  directives: {
+    clickOutside
+  },
+
   data () {
     return {
       userDropDownOpen: false
@@ -69,6 +75,12 @@ export default {
     ...mapGetters({
       'user': 'auth/authUser'
     })
+  },
+
+  methods: {
+    closeUserDropdown () {
+      this.userDropDownOpen = false
+    }
   }
 }
 </script>
